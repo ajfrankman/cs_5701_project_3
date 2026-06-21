@@ -1,4 +1,4 @@
-./reports/
-./__pycache__/
-./.vscode/
-./venv/
+reports/
+__pycache__/
+.vscode/
+.venv/
