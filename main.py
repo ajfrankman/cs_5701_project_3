@@ -50,8 +50,8 @@ def gen_report():
                 trial_strings.append(trial_str)
             if success_iterations > 0:
                 trial_strings.append(f'Successfully constrained {num_trials - failure_count} out of {num_trials} maps. ({(num_trials - failure_count)/num_trials:.2%})')
-                trial_strings.append(f'Average Loops to Constrain: {success_iterations/num_trials:.2f}')
-                trial_strings.append(f'Average Time to Constrain: {total_execution_time/num_trials:.6f} seconds')
+                trial_strings.append(f',Average Loops to Constrain: {success_iterations/num_trials:.2f}')
+                trial_strings.append(f',Average Time to Constrain: {total_execution_time/num_trials:.6f} seconds')
             else:
                 trial_strings.append('Could not successfully constrain any maps.')
             trial_strings.append(f'Failure Count: {failure_count}/{num_trials}')
