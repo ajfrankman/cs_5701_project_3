@@ -55,12 +55,11 @@ Each experiment folder under [reports/](reports/) contains:
 - a report text/CSV file with per-trial statistics
 
 ## Dependencies
-The project relies on:
-- `matplotlib`
-- `seaborn`
-- `numpy`
+See *Requirements.txt*
 
 ## Notes
+Becuase the maps looked a little unnatural, I included the ability to weight certain terrains as being more likely. This is passed into the Map class if desired but equally selects if not. This only applies to random generation. When constraining, everything is equally chosen from since I didn't have time to figure out why it caused race conditions.
+
 The code is designed to be easily extended by adding more terrain types or changing the compatibility rules in [utils.py](utils.py).
 
-Additionally, constraint function doesn't rely on a 2d grid, and every tile has a list of neighbors, it should be relatively easy to make a hex (or triangle, or mix of shapes) grid style random map generator.
+The constraint function doesn't rely on a 2d grid, and every tile has a list of neighbors, it should be relatively easy to make a hex (or triangle, or mix of shapes) grid style random map generator.

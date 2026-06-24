@@ -1,6 +1,5 @@
 from matplotlib import pyplot as plt
 import matplotlib.patches as mpatches
-import numpy as np
 from tile import Tile
 import random
 import seaborn as sns
@@ -90,7 +89,6 @@ class Map:
         return terrain_two in self.get_compatible_terrain(terrain_one)
     
     def _get_neighbor_coor(self, coordinate: tuple, diagonal: bool = True):
-        row, col = coordinate
         neighbor_unit_vectors = [(1,0), (0,1), (-1,0), (0,-1)]
         diag_unit_vectors = [(1,1), (-1,1), (-1,-1), (1,-1)]
         if diagonal:
@@ -159,7 +157,7 @@ class Map:
         max_compatible_neighbors = sum(self.is_compatible_terrain(tile.terrain_type, neighbor.terrain_type) for neighbor in tile.neighbor_tiles)
         #Checks if the tile is already compatible with all of its neighbors, if so, we can skip it
         if max_compatible_neighbors == len(tile.neighbor_tiles):
-            return True
+            return True            
         
         other_terrain = [terrain for terrain in self.terrain_list if terrain != tile.terrain_type]
         # Check which terrain is compatible with the most neighbors, and assign that terrain to the tile
@@ -173,12 +171,21 @@ class Map:
         tile.terrain_type = random.choice(max_terrains)
         return False
 
-    def constrain(self, max_loop: int = 100, debug: bool = False):
+    def constrain(self, max_loops_without_improvement: int = 20, debug: bool = False):
         loops = 0
         map_constrained = False
-        while not map_constrained and loops < max_loop:
-            map_constrained = all([self.run_min_conflict(tile) for tile in self.tile_list])
+        fewest_conflicts = len(self.tile_list)
+        loops_without_improvement = 0
+        while not map_constrained and loops_without_improvement < max_loops_without_improvement:
+            all_min_conflict_results = [self.run_min_conflict(tile) for tile in self.tile_list]
+            map_constrained = all(all_min_conflict_results)
+            conflicts = len([result for result in all_min_conflict_results if result is False])
+            if conflicts < fewest_conflicts:
+                fewest_conflicts = conflicts
+                loops_without_improvement = 0
+            else:
+                loops_without_improvement += 1
             loops += 1
             if debug:
                 self.print_map()
-        return map_constrained, loops
+        return map_constrained, loops, fewest_conflicts
